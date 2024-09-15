@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="476dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="76dp"
+        android:paddingHorizontal="15dp"
+        android:text="0"
+        android:textAlignment="textEnd"
+        android:textColor="@color/white"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/sumar"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:layout_marginEnd="110dp"
+        android:background="#000000"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="+"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restar" />
+
+    <Button
+        android:id="@+id/restar"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:background="#000000"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="-"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/igual"
+        app:layout_constraintTop_toBottomOf="@+id/multiplicar" />
+
+    <Button
+        android:id="@+id/multiplicar"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:background="#000000"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="x"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toStartOf="@+id/igual"
+        app:layout_constraintTop_toBottomOf="@+id/dividir" />
+
+    <Button
+        android:id="@+id/dividir"
+        style="@android:style/Widget.DeviceDefault.Button.Borderless.Small"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="228dp"
+        android:layout_marginEnd="110dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="÷"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/siete"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="228dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:onClick="botones"
+        android:text="7"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/ocho"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="228dp"
+        android:background="#000000"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:onClick="botones"
+        android:text="8"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintStart_toEndOf="@+id/siete"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/nueve"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="228dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:onClick="botones"
+        android:text="9"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintStart_toEndOf="@+id/ocho"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/cuatro"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="20dp"
+        android:background="#000000"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:onClick="botones"
+        android:text="4"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/siete" />
+
+    <Button
+        android:id="@+id/cinco"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:onClick="botones"
+        android:text="5"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintStart_toEndOf="@+id/cuatro"
+        app:layout_constraintTop_toBottomOf="@+id/ocho" />
+
+    <Button
+        android:id="@+id/seis"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:onClick="botones"
+        android:text="6"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintStart_toEndOf="@+id/cinco"
+        app:layout_constraintTop_toBottomOf="@+id/nueve" />
+
+    <Button
+        android:id="@+id/uno"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="20dp"
+        android:background="#000000"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:onClick="botones"
+        android:text="1"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cuatro" />
+
+    <Button
+        android:id="@+id/dos"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:background="#000000"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:onClick="botones"
+        android:text="2"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintStart_toEndOf="@+id/uno"
+        app:layout_constraintTop_toBottomOf="@+id/cinco" />
+
+    <Button
+        android:id="@+id/tres"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:background="#000000"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:onClick="botones"
+        android:text="3"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintStart_toEndOf="@+id/dos"
+        app:layout_constraintTop_toBottomOf="@+id/seis" />
+
+    <Button
+        android:id="@+id/cero"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="20dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:onClick="botones"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/uno" />
+
+    <Button
+        android:id="@+id/igual"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="90dp"
+        android:layout_height="180dp"
+        android:layout_marginEnd="20dp"
+        android:background="#000000"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:onClick="igual"
+        android:text="="
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clear" />
+
+    <Button
+        android:id="@+id/punto"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:onClick="botones"
+        android:text="."
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintStart_toEndOf="@+id/cero"
+        app:layout_constraintTop_toBottomOf="@+id/dos" />
+
+    <Button
+        android:id="@+id/clear"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="228dp"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="C"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/delete"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="DEL"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/resultado" />
+
+    <TextView
+        android:id="@+id/resultado"
+        android:layout_width="190dp"
+        android:layout_height="63dp"
+        android:paddingHorizontal="20dp"
+        android:text=""
+        android:textAlignment="textEnd"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/potencia"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="^"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/delete" />
+    />
+
+    <Button
+    android:id="@+id/porcentaje"
+    style="@style/Widget.Material3.Button.IconButton"
+    android:layout_width="80dp"
+    android:layout_height="60dp"
+    android:layout_marginTop="8dp"
+    android:fontFamily="sans-serif-condensed-medium"
+    android:text="%"
+    android:textColor="@color/white"
+    android:textSize="30dp"
+    app:layout_constraintStart_toEndOf="@+id/potencia"
+    app:layout_constraintTop_toBottomOf="@+id/delete" />
+    />
+
+    <Button
+        android:id="@+id/raiz"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="√"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/porcentaje"
+        app:layout_constraintTop_toBottomOf="@+id/delete" />
+    />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
