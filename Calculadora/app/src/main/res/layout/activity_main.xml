@@ -26,7 +26,7 @@
 
     <Button
         android:id="@+id/sumar"
-        android:layout_width="80dp"
+        android:layout_width="75dp"
         android:layout_height="90dp"
         android:layout_marginEnd="95dp"
         android:fontFamily="sans-serif-condensed-medium"
@@ -40,7 +40,7 @@
 
     <Button
         android:id="@+id/restar"
-        android:layout_width="80dp"
+        android:layout_width="75dp"
         android:layout_height="90dp"
         android:layout_marginEnd="5dp"
         android:fontFamily="sans-serif-condensed-medium"
@@ -55,7 +55,7 @@
 
     <Button
         android:id="@+id/multiplicar"
-        android:layout_width="80dp"
+        android:layout_width="75dp"
         android:layout_height="90dp"
         android:layout_marginEnd="5dp"
         android:backgroundTint="#2E3033"
@@ -69,7 +69,7 @@
 
     <Button
         android:id="@+id/dividir"
-        android:layout_width="80dp"
+        android:layout_width="75"
         android:layout_height="90dp"
         android:layout_marginTop="228dp"
         android:layout_marginEnd="95dp"
@@ -87,7 +87,7 @@
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="80dp"
         android:layout_height="90dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="228dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:onClick="botones"
@@ -130,7 +130,7 @@
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="80dp"
         android:layout_height="90dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:background="#000000"
         android:fontFamily="sans-serif-condensed-medium"
         android:onClick="botones"
@@ -171,7 +171,7 @@
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="80dp"
         android:layout_height="90dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:background="#000000"
         android:fontFamily="sans-serif-condensed-medium"
         android:onClick="botones"
@@ -214,7 +214,7 @@
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="80dp"
         android:layout_height="90dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:onClick="botones"
         android:text="0"
@@ -301,9 +301,9 @@
 
     <Button
         android:id="@+id/potencia"
-        android:layout_width="80dp"
+        android:layout_width="75dp"
         android:layout_height="60dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="100dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:backgroundTint="#2E3033"
@@ -316,7 +316,7 @@
 
     <Button
         android:id="@+id/porcentaje"
-        android:layout_width="80dp"
+        android:layout_width="75dp"
         android:layout_height="60dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="100dp"
@@ -331,7 +331,7 @@
 
     <Button
         android:id="@+id/raiz"
-        android:layout_width="80dp"
+        android:layout_width="75dp"
         android:layout_height="60dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="100dp"
