@@ -5,13 +5,13 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="#151619"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="476dp"
-        android:layout_height="60dp"
+        android:layout_width="410dp"
+        android:layout_height="63dp"
         android:layout_marginTop="76dp"
         android:paddingHorizontal="15dp"
         android:text="0"
@@ -26,56 +26,59 @@
 
     <Button
         android:id="@+id/sumar"
-        style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="80dp"
         android:layout_height="90dp"
-        android:layout_marginEnd="110dp"
-        android:background="#000000"
+        android:layout_marginEnd="95dp"
         android:fontFamily="sans-serif-condensed-medium"
+        android:backgroundTint="#2E3033"
         android:text="+"
         android:textColor="@color/white"
         android:textSize="40dp"
+        app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/restar" />
 
     <Button
         android:id="@+id/restar"
-        style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="80dp"
         android:layout_height="90dp"
-        android:background="#000000"
+        android:layout_marginEnd="5dp"
         android:fontFamily="sans-serif-condensed-medium"
+        android:backgroundTint="#2E3033"
         android:text="-"
         android:textColor="@color/white"
         android:textSize="40dp"
+        app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/igual"
         app:layout_constraintTop_toBottomOf="@+id/multiplicar" />
 
     <Button
         android:id="@+id/multiplicar"
-        style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="80dp"
         android:layout_height="90dp"
-        android:background="#000000"
+        android:layout_marginEnd="5dp"
+        android:backgroundTint="#2E3033"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="x"
         android:textColor="@color/white"
         android:textSize="40dp"
+        app:cornerRadius="10dp"
         app:layout_constraintEnd_toStartOf="@+id/igual"
         app:layout_constraintTop_toBottomOf="@+id/dividir" />
 
     <Button
         android:id="@+id/dividir"
-        style="@android:style/Widget.DeviceDefault.Button.Borderless.Small"
         android:layout_width="80dp"
         android:layout_height="90dp"
         android:layout_marginTop="228dp"
-        android:layout_marginEnd="110dp"
+        android:layout_marginEnd="95dp"
         android:fontFamily="sans-serif-condensed-medium"
+        android:backgroundTint="#2E3033"
         android:text="÷"
         android:textColor="@color/white"
         android:textSize="40dp"
+        app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -96,12 +99,11 @@
 
     <Button
         android:id="@+id/ocho"
-        style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="80dp"
         android:layout_height="90dp"
         android:layout_marginTop="228dp"
-        android:background="#000000"
         android:fontFamily="sans-serif-condensed-medium"
+        style="@style/Widget.Material3.Button.IconButton"
         android:onClick="botones"
         android:text="8"
         android:textColor="@color/white"
@@ -111,11 +113,11 @@
 
     <Button
         android:id="@+id/nueve"
-        style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="80dp"
         android:layout_height="90dp"
         android:layout_marginTop="228dp"
         android:fontFamily="sans-serif-condensed-medium"
+        style="@style/Widget.Material3.Button.IconButton"
         android:onClick="botones"
         android:text="9"
         android:textColor="@color/white"
@@ -153,10 +155,10 @@
 
     <Button
         android:id="@+id/seis"
-        style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="80dp"
         android:layout_height="90dp"
         android:fontFamily="sans-serif-condensed-medium"
+        style="@style/Widget.Material3.Button.IconButton"
         android:onClick="botones"
         android:text="6"
         android:textColor="@color/white"
@@ -223,18 +225,18 @@
 
     <Button
         android:id="@+id/igual"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="90dp"
+        android:layout_width="80dp"
         android:layout_height="180dp"
-        android:layout_marginEnd="20dp"
-        android:background="#000000"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="#45AE4A"
         android:fontFamily="sans-serif-condensed-medium"
         android:onClick="igual"
         android:text="="
         android:textColor="@color/white"
         android:textSize="40dp"
+        app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clear" />
+        app:layout_constraintTop_toBottomOf="@+id/delete" />
 
     <Button
         android:id="@+id/punto"
@@ -252,36 +254,42 @@
 
     <Button
         android:id="@+id/clear"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="90dp"
+        android:layout_width="80dp"
         android:layout_height="90dp"
         android:layout_marginTop="228dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="#2E3033"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="C"
-        android:textColor="@color/white"
-        android:textSize="40dp"
+        android:textColor="@android:color/transparent"
+        android:textSize="0dp"
+        app:cornerRadius="10dp"
+        app:icon="@android:drawable/ic_input_delete"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconSize="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/delete"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="#2E3033"
         android:fontFamily="sans-serif-condensed-medium"
-        android:text="DEL"
+        android:text="CE"
         android:textColor="@color/white"
-        android:textSize="40dp"
+        android:textSize="25dp"
+        app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resultado" />
+        app:layout_constraintTop_toBottomOf="@+id/clear" />
 
     <TextView
         android:id="@+id/resultado"
         android:layout_width="190dp"
         android:layout_height="63dp"
-        android:paddingHorizontal="20dp"
+        android:layout_marginEnd="36dp"
         android:text=""
         android:textAlignment="textEnd"
         android:textColor="@android:color/darker_gray"
@@ -292,45 +300,48 @@
 
     <Button
         android:id="@+id/potencia"
-        style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="80dp"
         android:layout_height="60dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="100dp"
         android:fontFamily="sans-serif-condensed-medium"
+        android:backgroundTint="#2E3033"
         android:text="^"
         android:textColor="@color/white"
         android:textSize="30dp"
+        app:cornerRadius="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/delete" />
-    />
+        app:layout_constraintTop_toBottomOf="@+id/resultado" />
 
     <Button
-    android:id="@+id/porcentaje"
-    style="@style/Widget.Material3.Button.IconButton"
-    android:layout_width="80dp"
-    android:layout_height="60dp"
-    android:layout_marginTop="8dp"
-    android:fontFamily="sans-serif-condensed-medium"
-    android:text="%"
-    android:textColor="@color/white"
-    android:textSize="30dp"
-    app:layout_constraintStart_toEndOf="@+id/potencia"
-    app:layout_constraintTop_toBottomOf="@+id/delete" />
-    />
+        android:id="@+id/porcentaje"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="100dp"
+        android:backgroundTint="#2E3033"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="%"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        app:cornerRadius="10dp"
+        app:layout_constraintStart_toEndOf="@+id/potencia"
+        app:layout_constraintTop_toBottomOf="@+id/resultado" />
 
     <Button
         android:id="@+id/raiz"
-        style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="80dp"
         android:layout_height="60dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="100dp"
+        android:backgroundTint="#2E3033"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="√"
         android:textColor="@color/white"
         android:textSize="30dp"
+        app:cornerRadius="10dp"
         app:layout_constraintStart_toEndOf="@+id/porcentaje"
-        app:layout_constraintTop_toBottomOf="@+id/delete" />
+        app:layout_constraintTop_toBottomOf="@+id/resultado" />
     />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
