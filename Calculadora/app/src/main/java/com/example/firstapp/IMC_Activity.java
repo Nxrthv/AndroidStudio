@@ -25,6 +25,7 @@ public class IMC_Activity extends AppCompatActivity {
             return insets;
         });
 
+        //Boton para crear la Nueva Activida de la Ventana de IMC
         Button Calculadora = findViewById(R.id.calculadora);
         Button calcular =  findViewById(R.id.calcular);
 
