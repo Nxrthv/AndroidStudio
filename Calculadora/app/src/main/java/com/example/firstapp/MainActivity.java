@@ -1,5 +1,6 @@
 package com.example.firstapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,7 +12,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
-import static java.lang.Math.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +27,13 @@ public class MainActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        Button IMC = findViewById(R.id.IMC);
+
+        IMC.setOnClickListener(view->{
+            Intent i = new Intent(MainActivity.this,IMC_Activity.class);
+            startActivity(i);
         });
 
         Button num1 = findViewById(R.id.uno);
