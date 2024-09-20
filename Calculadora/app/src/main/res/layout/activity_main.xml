@@ -365,6 +365,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/Conversor"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginBottom="76dp"
+        android:backgroundTint="#2E3033"
+        android:text=""
+        app:cornerRadius="10dp"
+        app:icon="@drawable/calculadora"
+        app:iconGravity="textEnd"
+        app:iconPadding="0dp"
+        app:iconSize="50dp"
+        app:iconTint="#FFFFFF"
+        app:iconTintMode="multiply"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/IMC" />
+
     <TextView
         android:id="@+id/textView4"
         android:layout_width="80dp"
@@ -379,6 +397,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/IMC"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="80dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/anta"
+        android:text="Conversor de Moneda"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Conversor"
         app:layout_constraintVertical_bias="0.0" />
     />
 

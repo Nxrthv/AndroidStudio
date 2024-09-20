@@ -30,10 +30,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button IMC = findViewById(R.id.IMC);
+        Button Conversor = findViewById(R.id.Conversor);
 
         IMC.setOnClickListener(view->{
             Intent i = new Intent(MainActivity.this,IMC_Activity.class);
             startActivity(i);
+        });
+
+        Conversor.setOnClickListener(view -> {
+           Intent i = new Intent(MainActivity.this,conversor_de_moneda.class);
+           startActivity(i);
         });
 
         Button num1 = findViewById(R.id.uno);
