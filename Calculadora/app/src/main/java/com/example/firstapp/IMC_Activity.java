@@ -55,7 +55,7 @@ public class IMC_Activity extends AppCompatActivity {
         });
 
         conversor.setOnClickListener(view ->{
-           Intent i = new Intent(IMC_Activity.this,conversor_de_moneda.class);
+           Intent i = new Intent(IMC_Activity.this, Conversor_Activity.class);
            startActivity(i);
         });
 

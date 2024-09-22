@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Creacion de la Vista al Conversor de Moneda
         conversor.setOnClickListener(view -> {
-           Intent i = new Intent(MainActivity.this,conversor_de_moneda.class);
+           Intent i = new Intent(MainActivity.this, Conversor_Activity.class);
            startActivity(i);
         });
 

@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -22,13 +24,14 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class conversor_de_moneda extends AppCompatActivity {
+public class Conversor_Activity extends AppCompatActivity {
 
     private boolean areFABsVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_conversor_de_moneda);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -53,12 +56,12 @@ public class conversor_de_moneda extends AppCompatActivity {
         });
 
         canculadora.setOnClickListener(view -> {
-            Intent i = new Intent(conversor_de_moneda.this,MainActivity.class);
+            Intent i = new Intent(Conversor_Activity.this,MainActivity.class);
             startActivity(i);
         });
 
         imc.setOnClickListener(view -> {
-            Intent i = new Intent(conversor_de_moneda.this,IMC_Activity.class);
+            Intent i = new Intent(Conversor_Activity.this,IMC_Activity.class);
             startActivity(i);
         });
 
