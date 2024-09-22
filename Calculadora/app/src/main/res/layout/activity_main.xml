@@ -347,73 +347,45 @@
         app:layout_constraintStart_toEndOf="@+id/porcentaje"
         app:layout_constraintTop_toBottomOf="@+id/resultado" />
 
-    <Button
-        android:id="@+id/IMC"
+    <!-- Principal -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_main"
+        android:layout_width="77dp"
+        android:layout_height="77dp"
+        android:layout_margin="30dp"
+        android:src="@drawable/sumar"
+        app:backgroundTint="#2E3033"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="50dp"
+        app:useCompatPadding="false" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/imc"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="76dp"
-        android:backgroundTint="#2E3033"
-        android:text=""
-        app:cornerRadius="10dp"
-        app:icon="@drawable/imc"
-        app:iconGravity="textEnd"
-        app:iconPadding="0dp"
-        app:iconSize="50dp"
-        app:iconTint="#FFFFFF"
-        app:iconTintMode="multiply"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginEnd="34dp"
+        android:layout_marginBottom="12dp"
+        android:visibility="gone"
+        app:maxImageSize="50dp"
+        android:src="@drawable/imc"
+        android:tintMode="multiply"
+        app:backgroundTint="#2E3033"
+        app:layout_constraintBottom_toTopOf="@id/fab_main"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/Conversor"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/conversor"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_marginStart="22dp"
-        android:layout_marginBottom="76dp"
-        android:backgroundTint="#2E3033"
-        android:text=""
-        app:cornerRadius="10dp"
-        app:icon="@drawable/conversor"
-        app:iconGravity="textEnd"
-        app:iconPadding="0dp"
-        app:iconSize="45dp"
-        app:iconTint="#FFFFFF"
-        app:iconTintMode="src_in"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/IMC" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="80dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="27dp"
+        android:layout_marginEnd="34dp"
         android:layout_marginBottom="12dp"
-        android:fontFamily="@font/anta"
-        android:text="Indice de Masa Corporal"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/IMC"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="80dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginBottom="12dp"
-        android:fontFamily="@font/anta"
-        android:text="Conversor de Moneda"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Conversor"
-        app:layout_constraintVertical_bias="0.0" />
-    />
+        app:maxImageSize="50dp"
+        android:visibility="gone"
+        android:src="@drawable/conversor"
+        app:backgroundTint="#2E3033"
+        android:tintMode="multiply"
+        app:layout_constraintBottom_toTopOf="@id/imc"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
