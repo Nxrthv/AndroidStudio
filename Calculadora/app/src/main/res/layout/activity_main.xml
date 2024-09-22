@@ -374,12 +374,12 @@
         android:backgroundTint="#2E3033"
         android:text=""
         app:cornerRadius="10dp"
-        app:icon="@drawable/calculadora"
+        app:icon="@drawable/conversor"
         app:iconGravity="textEnd"
         app:iconPadding="0dp"
-        app:iconSize="50dp"
+        app:iconSize="45dp"
         app:iconTint="#FFFFFF"
-        app:iconTintMode="multiply"
+        app:iconTintMode="src_in"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/IMC" />
 

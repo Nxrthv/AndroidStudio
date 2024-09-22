@@ -2,6 +2,7 @@ package com.example.firstapp;
 
 import static java.lang.String.format;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,7 +13,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -23,10 +24,11 @@ import java.util.List;
 
 public class conversor_de_moneda extends AppCompatActivity {
 
+    private boolean areFABsVisible = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //EdgeToEdge.enable(this);
         setContentView(R.layout.activity_conversor_de_moneda);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -34,15 +36,42 @@ public class conversor_de_moneda extends AppCompatActivity {
             return insets;
         });
 
+        FloatingActionButton fabMain = findViewById(R.id.fab_main);
+        FloatingActionButton canculadora = findViewById(R.id.calculadora);
+        FloatingActionButton imc = findViewById(R.id.imc);
+
+        fabMain.setOnClickListener(view -> {
+            if (areFABsVisible) {
+                canculadora.setVisibility(View.GONE);
+                imc.setVisibility(View.GONE);
+                areFABsVisible = false;
+            } else {
+                canculadora.setVisibility(View.VISIBLE);
+                imc.setVisibility(View.VISIBLE);
+                areFABsVisible = true;
+            }
+        });
+
+        canculadora.setOnClickListener(view -> {
+            Intent i = new Intent(conversor_de_moneda.this,MainActivity.class);
+            startActivity(i);
+        });
+
+        imc.setOnClickListener(view -> {
+            Intent i = new Intent(conversor_de_moneda.this,IMC_Activity.class);
+            startActivity(i);
+        });
+
         Spinner spinner =  findViewById(R.id.moneda);
 
         List<String> monedas = new ArrayList<>();
-        monedas.add("Selecciona");
+        monedas.add("Tipo de Cambio");
         monedas.add("Dolar");
         monedas.add("Euro");
+        monedas.add("Yen");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, monedas);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1, monedas);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1);
         spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -53,23 +82,29 @@ public class conversor_de_moneda extends AppCompatActivity {
                 TextView resultado = findViewById(R.id.result);
                 EditText cantidad = findViewById(R.id.cantidad);
 
-                    String cantidadTexto = cantidad.getText().toString();
-                    if (cantidadTexto.isEmpty()) {
-                        Toast.makeText(getApplicationContext(), "Por favor ingrese una cantidad", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
                     convertir.setOnClickListener(v ->{
+                        String cantidadTexto = cantidad.getText().toString();
+                        if (cantidadTexto.isEmpty()) {
+                            Toast.makeText(getApplicationContext(), "Por favor ingrese una cantidad", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         Double Sol = Double.parseDouble(cantidadTexto);
-                        if (selected.equals("Dolar")) {
-                            Toast.makeText(getApplicationContext(), "Seleccionaste: " + selected, Toast.LENGTH_SHORT).show();
-                            Double rest = Sol / 3.75;
-                            resultado.setText(format("%.2f", rest));
-                        } else if (selected.equals("Euro")) {
-                            Toast.makeText(getApplicationContext(), "Seleccionaste: " + selected, Toast.LENGTH_SHORT).show();
-                            Double rest = Sol / 4.19;
-                            resultado.setText(format("%.2f", rest));
-                        }else{
-                            resultado.setText("Error");
+                        switch (selected){
+                            case "Dolar":
+                                Double rest = Sol / 3.75;
+                                resultado.setText("$"+format("%.2f", rest)+" Dolares");
+                                break;
+                            case "Euro":
+                                rest = Sol / 4.19;
+                                resultado.setText("€"+format("%.2f", rest)+" Euros");
+                                break;
+                            case "Yen":
+                                rest = Sol * 38.43;
+                                resultado.setText("¥"+format("%.2f", rest)+" Yenes");
+                                break;
+                            default:
+                                Toast.makeText(getApplicationContext(), "Seleccione un tipo de Moneda", Toast.LENGTH_SHORT).show();
+                                break;
                         }
                     });
                 };
@@ -78,7 +113,10 @@ public class conversor_de_moneda extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
