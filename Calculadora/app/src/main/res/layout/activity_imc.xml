@@ -8,25 +8,6 @@
     android:background="#151619"
     tools:context=".IMC_Activity">
 
-
-    <Button
-        android:id="@+id/calculadora"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="50dp"
-        android:backgroundTint="#2E3033"
-        app:cornerRadius="10dp"
-        app:icon="@drawable/calculadora"
-        app:iconGravity="textEnd"
-        app:iconPadding="0dp"
-        app:iconSize="50dp"
-        app:iconTint="@color/white"
-        app:iconTintMode="multiply"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.882"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="150dp"
@@ -202,5 +183,47 @@
         android:textSize="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Floating Button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_main"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="30dp"
+        android:src="@android:drawable/ic_menu_add"
+        android:tintMode="multiply"
+        app:backgroundTint="#2E3033"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="40dp"
+        app:useCompatPadding="false" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/calculadora"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        android:src="@drawable/calculadora"
+        android:tintMode="multiply"
+        app:maxImageSize="40dp"
+        app:backgroundTint="#2E3033"
+        app:layout_constraintBottom_toTopOf="@id/fab_main"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/conversor"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        android:tintMode="multiply"
+        android:src="@drawable/conversor"
+        app:maxImageSize="40dp"
+        app:backgroundTint="#2E3033"
+        app:layout_constraintBottom_toTopOf="@id/calculadora"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

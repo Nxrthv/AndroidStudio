@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         fabMain.setOnClickListener(view -> {
             if (areFABsVisible) {
                 imc.setVisibility(View.GONE);
-                imc.setVisibility(View.GONE);
+                conversor.setVisibility(View.GONE);
                 areFABsVisible = false;
             } else {
                 conversor.setVisibility(View.VISIBLE);

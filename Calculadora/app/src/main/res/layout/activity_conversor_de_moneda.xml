@@ -179,41 +179,42 @@
     <!-- Floating Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_main"
-        android:layout_width="77dp"
-        android:layout_height="77dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_margin="30dp"
-        android:src="@drawable/sumar"
+        android:src="@android:drawable/ic_menu_add"
+        android:tintMode="multiply"
         app:backgroundTint="#2E3033"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="50dp"
+        app:maxImageSize="40dp"
         app:useCompatPadding="false" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/calculadora"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginBottom="12dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
         android:visibility="gone"
-        app:maxImageSize="50dp"
         android:src="@drawable/calculadora"
         android:tintMode="multiply"
+        app:maxImageSize="40dp"
         app:backgroundTint="#2E3033"
         app:layout_constraintBottom_toTopOf="@id/fab_main"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/imc"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginEnd="34dp"
-        android:layout_marginBottom="12dp"
-        app:maxImageSize="50dp"
-        android:visibility="gone"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
         android:src="@drawable/imc"
-        app:backgroundTint="#2E3033"
         android:tintMode="multiply"
+        android:visibility="gone"
+        app:maxImageSize="40dp"
+        app:backgroundTint="#2E3033"
         app:layout_constraintBottom_toTopOf="@id/calculadora"
         app:layout_constraintEnd_toEndOf="parent" />
 
