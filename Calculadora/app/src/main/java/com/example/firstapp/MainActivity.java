@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         opers.add(raiz);
 
         //Valor para Verificar si ya se Selecciono una Operacion
-        final boolean[] operacionSeleccionada = {false};
+        final boolean[] operacionSeleccionada = {false,true};
 
         // Para cada botón de operación en 'opers':
         // Si es "√", calcula la raíz cuadrada del número en pantalla (si es positivo).
@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
                     case "+":
                     default:
                         result = firstNum + secondNum;
+                        break;
                 }
                 //Al completarse el Calculo la variable que valida la seleccion de una Operacion
                 //Regresa a false y se limpia
