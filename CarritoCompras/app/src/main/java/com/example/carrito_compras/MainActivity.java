@@ -26,9 +26,12 @@ import retrofit2.http.GET;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListView list;
-    private ArrayList<String> products = new ArrayList<>();
-    private ArrayAdapter<String> arrayAdapter;
+    private ListView list, listCategory, listPrice;
+    private final ArrayList<String> products = new ArrayList<>();
+    private final ArrayList<String> category = new ArrayList<>();
+    private final ArrayList<String> price = new ArrayList<>();
+
+    private ArrayAdapter<String> arrayAdapter, categoryAdapter, priceAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, products);
         list = findViewById(R.id.list);
         list.setAdapter(arrayAdapter);
+
+        categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, category);
+        listCategory = findViewById(R.id.listCategoria);
+        listCategory.setAdapter(categoryAdapter);
+
+        priceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, price);
+        listPrice = findViewById(R.id.listPrecio);
+        listPrice.setAdapter(priceAdapter);
 
         EditText producto = findViewById(R.id.iptProducto);
         EditText precio = findViewById(R.id.iptPrecio);
@@ -137,8 +148,12 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     for (Post post : response.body()) {
                         products.add(post.getProducto());
+                        category.add(post.getCategoria());
+                        price.add(post.getPrecio());
                     }
                     arrayAdapter.notifyDataSetChanged();
+                    categoryAdapter.notifyDataSetChanged();
+                    priceAdapter.notifyDataSetChanged();
                 } else {
                     Log.e("API_ERROR", "Error en la respuesta: " + response.code());
                 }
