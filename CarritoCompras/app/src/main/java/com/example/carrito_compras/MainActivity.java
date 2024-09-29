@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getPosts() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8000/api/")
+                .baseUrl("http://192.168.224.36:8000/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
