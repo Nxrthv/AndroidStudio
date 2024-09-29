@@ -60,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
         EditText producto = findViewById(R.id.iptProducto);
         EditText precio = findViewById(R.id.iptPrecio);
         EditText categoria = findViewById(R.id.iptCategoria);
-        EditText description = findViewById(R.id.iptDescripcion);
 
-        Button guardar = findViewById(R.id.guardar);
-        Button buscar = findViewById(R.id.buscar);
+        Button guardar = findViewById(R.id.save);
+        Button buscar = findViewById(R.id.search);
+        Button actualizar = findViewById(R.id.update);
 
         buscar.setOnClickListener(v -> {
             Intent i = new Intent(MainActivity.this, GetMain.class);
@@ -74,13 +74,11 @@ public class MainActivity extends AppCompatActivity {
             String txtProducto = producto.getText().toString();
             String txtPrecio = precio.getText().toString();
             String txtCategoria = categoria.getText().toString();
-            String txtDescripcion = description.getText().toString();
 
             Post nuevoPost = new Post();
             nuevoPost.setProducto(txtProducto);
             nuevoPost.setPrecio(txtPrecio);
             nuevoPost.setCategoria(txtCategoria);
-            nuevoPost.setDescripcion(txtDescripcion);
 
             products.add(nuevoPost.getProducto());
 
@@ -115,14 +113,6 @@ public class MainActivity extends AppCompatActivity {
 
         public void setCategoria(String categoria) {
             this.Category = Category;
-        }
-
-        public String getDescripcion() {
-            return Description;
-        }
-
-        public void setDescripcion(String descripcion) {
-            this.Description = Description;
         }
     }
 
