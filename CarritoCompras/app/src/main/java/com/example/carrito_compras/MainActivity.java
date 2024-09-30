@@ -7,13 +7,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,16 +25,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 
 public class MainActivity extends AppCompatActivity {
 
     private ListView list, listCategory, listPrice;
-    private final ArrayList<String> products = new ArrayList<>();
+    private final ArrayList<String> product = new ArrayList<>();
     private final ArrayList<String> category = new ArrayList<>();
     private final ArrayList<String> price = new ArrayList<>();
 
     private ArrayAdapter<String> arrayAdapter, categoryAdapter, priceAdapter;
+
+    private PostService postService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +52,12 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, products);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://192.168.224.36:8000/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, product);
         list = findViewById(R.id.list);
         list.setAdapter(arrayAdapter);
 
@@ -65,30 +77,67 @@ public class MainActivity extends AppCompatActivity {
         Button buscar = findViewById(R.id.search);
         Button actualizar = findViewById(R.id.update);
 
+        actualizar.setOnClickListener(v ->{
+            obtenerDatos();
+        });
+
         buscar.setOnClickListener(v -> {
             Intent i = new Intent(MainActivity.this, GetMain.class);
             startActivity(i);
         });
 
         guardar.setOnClickListener(v ->{
-            String txtProducto = producto.getText().toString();
-            String txtPrecio = precio.getText().toString();
-            String txtCategoria = categoria.getText().toString();
 
             Post nuevoPost = new Post();
-            nuevoPost.setProducto(txtProducto);
-            nuevoPost.setPrecio(txtPrecio);
-            nuevoPost.setCategoria(txtCategoria);
+            nuevoPost.setProducto(producto.getText().toString().trim());
+            nuevoPost.setPrecio(precio.getText().toString().trim());
+            nuevoPost.setCategoria(categoria.getText().toString().trim());
+            nuevoPost.setDescripcion("Ingresar desde Web");
 
-            products.add(nuevoPost.getProducto());
+            postService = retrofit.create(PostService.class);
+            Call<Post> call = postService.insertPost(nuevoPost);
 
-            arrayAdapter.notifyDataSetChanged();
+            call.enqueue(new Callback<Post>() {
+                @Override
+                public void onResponse(Call<Post> call, Response<Post> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Log.d("DEBUG", "Datos recibidos: " + response.body());
+
+                        product.add(nuevoPost.getProducto());
+                        category.add(nuevoPost.getCategoria());
+                        price.add(nuevoPost.getPrecio());
+
+                        arrayAdapter.notifyDataSetChanged();
+                        categoryAdapter.notifyDataSetChanged();
+                        priceAdapter.notifyDataSetChanged();
+
+                        producto.setText("");
+                        precio.setText("");
+                        categoria.setText("");
+
+                        Toast.makeText(MainActivity.this, "Producto guardado con éxito", Toast.LENGTH_SHORT).show();
+                    } else if (response.code() == 400) {
+                        Toast.makeText(MainActivity.this, "Error en la validación: " + response.message(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        try {
+                            Log.e("API_ERROR", response.errorBody().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Post> call, Throwable t) {
+                    Toast.makeText(MainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         });
-
-        getPosts();
+        obtenerDatos();
     }
 
     public static class Post {
+
         private String Product, Price, Category, Description;
 
         public String getProducto() {
@@ -96,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void setProducto(String product) {
-            this.Product = Product;
+            this.Product = product;
         }
 
         public String getPrecio() {
@@ -104,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void setPrecio(String precio) {
-            this.Price = Price;
+            this.Price = precio;
         }
 
         public String getCategoria() {
@@ -112,18 +161,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void setCategoria(String categoria) {
-            this.Category = Category;
+            this.Category = categoria;
+        }
+
+        public String getDescripcion() {
+            return Description;
+        }
+
+        public void setDescripcion(String descripcion) {
+            this.Description = descripcion;
         }
     }
 
-    public interface PostService {
-        String API_ROUTE = "/productos";
-
-        @GET(API_ROUTE)
-        Call<List<Post>> getPost();
-    }
-
-    private void getPosts() {
+    private void obtenerDatos() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://192.168.224.36:8000/api/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -136,8 +186,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    product.clear();
+                    category.clear();
+                    price.clear();
                     for (Post post : response.body()) {
-                        products.add(post.getProducto());
+                        product.add(post.getProducto());
                         category.add(post.getCategoria());
                         price.add(post.getPrecio());
                     }
@@ -154,5 +207,15 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("API_FAILURE", "Error: " + t.getMessage());
             }
         });
+    }
+
+    public interface PostService {
+        String API_ROUTE = "/api/productos";
+
+        @GET(API_ROUTE)
+        Call<List<Post>> getPost();
+
+        @POST(API_ROUTE)
+        Call<Post> insertPost(@Body Post nuevoPost);
     }
 }
