@@ -1,16 +1,14 @@
 package com.example.carrito_compras;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -28,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,21 +76,20 @@ public class MainActivity extends AppCompatActivity {
         Button buscar = findViewById(R.id.search);
         Button actualizar = findViewById(R.id.update);
 
-        actualizar.setOnClickListener(v ->{
-            obtenerDatos();
-        });
-
-        buscar.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, GetMain.class);
-            startActivity(i);
-        });
-
         guardar.setOnClickListener(v ->{
+            String txtProducto, txtPrecio, txtCategoria;
+            txtProducto = producto.getText().toString();
+            txtPrecio = precio.getText().toString();
+            txtCategoria = categoria.getText().toString();
+
+            if(txtProducto.isEmpty()||txtCategoria.isEmpty()||txtPrecio.isEmpty()){
+                Toast.makeText(this, "Complete todos los Campos",Toast.LENGTH_SHORT).show();
+            }
 
             Post nuevoPost = new Post();
-            nuevoPost.setProducto(producto.getText().toString().trim());
-            nuevoPost.setPrecio(precio.getText().toString().trim());
-            nuevoPost.setCategoria(categoria.getText().toString().trim());
+            nuevoPost.setProducto(txtProducto);
+            nuevoPost.setPrecio(txtPrecio);
+            nuevoPost.setCategoria(txtCategoria);
             nuevoPost.setDescripcion("Ingresar desde Web");
 
             postService = retrofit.create(PostService.class);
@@ -105,15 +103,13 @@ public class MainActivity extends AppCompatActivity {
 
                         product.add(nuevoPost.getProducto());
                         category.add(nuevoPost.getCategoria());
-                        price.add(nuevoPost.getPrecio());
+                        price.add("S/ "+nuevoPost.getPrecio());
 
                         arrayAdapter.notifyDataSetChanged();
                         categoryAdapter.notifyDataSetChanged();
                         priceAdapter.notifyDataSetChanged();
 
-                        producto.setText("");
-                        precio.setText("");
-                        categoria.setText("");
+                        limpiarCampos();
 
                         Toast.makeText(MainActivity.this, "Producto guardado con éxito", Toast.LENGTH_SHORT).show();
                     } else if (response.code() == 400) {
@@ -134,6 +130,70 @@ public class MainActivity extends AppCompatActivity {
             });
         });
         obtenerDatos();
+
+        actualizar.setOnClickListener(v ->{
+            obtenerDatos();
+        });
+
+        buscar.setOnClickListener(v -> {
+            PostService postService = retrofit.create(PostService.class);
+            Call<ApiResponse> call = postService.getProduct(producto.getText().toString());
+
+            call.enqueue(new Callback<ApiResponse>() {
+                @Override
+                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+
+                        Post producto = response.body().getMessage();
+                        EditText editTextPrecio= findViewById(R.id.iptPrecio);
+                        EditText editTextCategoria = findViewById(R.id.iptCategoria);
+
+                        editTextPrecio.setText(producto.getPrecio());
+                        editTextCategoria.setText(producto.getCategoria());
+
+                    } else {
+                        Log.e("API_ERROR", "Producto no encontrado o error en la respuesta: " + response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ApiResponse> call, Throwable t) {
+                    Log.e("API_FAILURE", "Error: " + t.getMessage());
+                }
+            });
+        });
+
+    }
+
+    public class ApiResponse {
+        private Post message;
+        private int status;
+
+        public Post getMessage() {
+            return message;
+        }
+
+        public void setMessage(Post message) {
+            this.message = message;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+    }
+
+    private void limpiarCampos() {
+        EditText producto = findViewById(R.id.iptProducto);
+        EditText precio = findViewById(R.id.iptPrecio);
+        EditText categoria = findViewById(R.id.iptCategoria);
+
+        producto.setText("");
+        precio.setText("");
+        categoria.setText("");
     }
 
     public static class Post {
@@ -170,6 +230,11 @@ public class MainActivity extends AppCompatActivity {
 
         public void setDescripcion(String descripcion) {
             this.Description = descripcion;
+        }
+
+        @Override
+        public String toString() {
+            return "Producto: " + Product + ", Categoria: " + Category + ", Precio: " + Price;
         }
     }
 
@@ -214,6 +279,9 @@ public class MainActivity extends AppCompatActivity {
 
         @GET(API_ROUTE)
         Call<List<Post>> getPost();
+
+        @GET("productos/{name}")
+        Call<ApiResponse> getProduct(@Path("name") String name);
 
         @POST(API_ROUTE)
         Call<Post> insertPost(@Body Post nuevoPost);
