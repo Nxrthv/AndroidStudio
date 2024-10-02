@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "1093812896000",
+    "firebase_url": "https://fir-d3539-default-rtdb.firebaseio.com",
+    "project_id": "fir-d3539",
+    "storage_bucket": "fir-d3539.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093812896000:android:e4cba63dc687c149ed33e5",
+        "android_client_info": {
+          "package_name": "com.example.carrito_compras"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEupi8d1JGWHN_DQPmjuYTMk192nz4GKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093812896000:android:c67ebde1b52243c2ed33e5",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEupi8d1JGWHN_DQPmjuYTMk192nz4GKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -8,15 +8,24 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.io.IOException;
+import com.example.carrito_compras.Model.Producto;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,19 +39,28 @@ import retrofit2.http.Path;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListView list, listCategory, listPrice;
+    EditText producto, precio, categoria;
+
+    Button guardar, buscar, actualizar;
+
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+    private ListView listProduct, listCategory, listPrice;
     private final ArrayList<String> product = new ArrayList<>();
     private final ArrayList<String> category = new ArrayList<>();
     private final ArrayList<String> price = new ArrayList<>();
 
-    private ArrayAdapter<String> arrayAdapter, categoryAdapter, priceAdapter;
+    private ArrayAdapter<String> productAdapter, categoryAdapter, priceAdapter;
 
     private PostService postService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -56,9 +74,9 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, product);
-        list = findViewById(R.id.list);
-        list.setAdapter(arrayAdapter);
+        productAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, product);
+        listProduct = findViewById(R.id.list);
+        listProduct.setAdapter(productAdapter);
 
         categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, category);
         listCategory = findViewById(R.id.listCategoria);
@@ -68,25 +86,40 @@ public class MainActivity extends AppCompatActivity {
         listPrice = findViewById(R.id.listPrecio);
         listPrice.setAdapter(priceAdapter);
 
-        EditText producto = findViewById(R.id.iptProducto);
-        EditText precio = findViewById(R.id.iptPrecio);
-        EditText categoria = findViewById(R.id.iptCategoria);
+        producto = findViewById(R.id.iptProducto);
+        precio = findViewById(R.id.iptPrecio);
+        categoria = findViewById(R.id.iptCategoria);
 
-        Button guardar = findViewById(R.id.save);
-        Button buscar = findViewById(R.id.search);
-        Button actualizar = findViewById(R.id.update);
+        guardar = findViewById(R.id.save);
+        buscar = findViewById(R.id.search);
+        actualizar = findViewById(R.id.update);
+
+        String txtProducto = producto.getText().toString();
+        String txtPrecio = precio.getText().toString();
+        String txtCategoria = categoria.getText().toString();
+
+        initDataBase();
 
         guardar.setOnClickListener(v ->{
-            String txtProducto, txtPrecio, txtCategoria;
-            txtProducto = producto.getText().toString();
-            txtPrecio = precio.getText().toString();
-            txtCategoria = categoria.getText().toString();
 
-            if(txtProducto.isEmpty()||txtCategoria.isEmpty()||txtPrecio.isEmpty()){
-                Toast.makeText(this, "Complete todos los Campos",Toast.LENGTH_SHORT).show();
+            String product = producto.getText().toString();
+            String price = precio.getText().toString();
+            String category = categoria.getText().toString();
+
+            if(product.isEmpty()||price.isEmpty()||category.isEmpty()){
+                validation();
+            }else {
+                Producto p = new Producto();
+                p.setUid(UUID.randomUUID().toString());
+                p.setProducto(product);
+                p.setPrecio("S/ "+price);
+                p.setCategoria(category);
+                p.setDescripcion("Ingresar en la Web");
+                databaseReference.child("Producto").child(p.getUid()).setValue(p);
+                Toast.makeText(this, "Agregado", Toast.LENGTH_SHORT).show();
+                limpiarCampos();
             }
-
-            Post nuevoPost = new Post();
+            /*Post nuevoPost = new Post();
             nuevoPost.setProducto(txtProducto);
             nuevoPost.setPrecio(txtPrecio);
             nuevoPost.setCategoria(txtCategoria);
@@ -127,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onFailure(Call<Post> call, Throwable t) {
                     Toast.makeText(MainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            });
+            });**/
         });
         obtenerDatos();
 
@@ -162,7 +195,62 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         });
+    }
 
+    private void validation(){
+        EditText producto, precio, categoria;
+        producto = findViewById(R.id.iptProducto);
+        precio = findViewById(R.id.iptPrecio);
+        categoria = findViewById(R.id.iptCategoria);
+
+        String txtProducto, txtPrecio, txtCategoria;
+        txtProducto = producto.getText().toString();
+        txtPrecio = precio.getText().toString();
+        txtCategoria = categoria.getText().toString();
+
+        if(txtProducto.isEmpty()){
+            producto.setError("Required");
+        } else if(txtPrecio.isEmpty()) {
+            precio.setError("Required");
+        }else if(txtCategoria.isEmpty()){
+            categoria.setError("Required");
+        }
+    }
+
+    private void limpiarCampos() {
+        EditText producto = findViewById(R.id.iptProducto);
+        EditText precio = findViewById(R.id.iptPrecio);
+        EditText categoria = findViewById(R.id.iptCategoria);
+
+        producto.setText("");
+        precio.setText("");
+        categoria.setText("");
+    }
+
+    private void getData(){
+        databaseReference.child("Productos").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listProduct.clearFocus();
+                for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
+                    Producto p = objSnaptshot.getValue(Producto.class);
+                    listProduct.add(p);
+                }
+                productAdapter = new ArrayAdapter<Producto>(MainActivity.this, android.R.layout.simple_list_item_1, listProduct);
+                listProduct.setAdapter(productAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("getData", "Error al leer los datos", error.toException());
+            }
+        });
+    }
+
+    private void initDataBase(){
+        FirebaseApp.initializeApp(this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
 
     public class ApiResponse {
@@ -184,16 +272,6 @@ public class MainActivity extends AppCompatActivity {
         public void setStatus(int status) {
             this.status = status;
         }
-    }
-
-    private void limpiarCampos() {
-        EditText producto = findViewById(R.id.iptProducto);
-        EditText precio = findViewById(R.id.iptPrecio);
-        EditText categoria = findViewById(R.id.iptCategoria);
-
-        producto.setText("");
-        precio.setText("");
-        categoria.setText("");
     }
 
     public static class Post {
@@ -259,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
                         category.add(post.getCategoria());
                         price.add(post.getPrecio());
                     }
-                    arrayAdapter.notifyDataSetChanged();
+                    productAdapter.notifyDataSetChanged();
                     categoryAdapter.notifyDataSetChanged();
                     priceAdapter.notifyDataSetChanged();
                 } else {
