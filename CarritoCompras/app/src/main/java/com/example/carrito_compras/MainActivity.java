@@ -96,9 +96,7 @@ public class MainActivity extends AppCompatActivity {
         buscar = findViewById(R.id.search);
         actualizar = findViewById(R.id.update);
 
-        initDataBase();
-        getData();
-
+        listProduct = findViewById(R.id.list);
         productAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, product);
         listProduct.setAdapter(productAdapter);
 
@@ -118,7 +116,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });**/
-        
+
+        initDataBase();
+        getData();
+
         guardar.setOnClickListener(v ->{
 
             String product = producto.getText().toString();
