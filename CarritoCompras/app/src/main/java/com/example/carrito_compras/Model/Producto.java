@@ -40,4 +40,9 @@ public class Producto {
     public void setDescripcion(String descripcion) {
         Descripcion = descripcion;
     }
+
+    @Override
+    public String toString() {
+        return "Nombre: "+Producto+" - Categoria: "+Categoria+" - Precio:"+Precio;//+" - Descripcion: "+Descripcion;
+    }
 }

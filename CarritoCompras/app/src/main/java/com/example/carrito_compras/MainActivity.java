@@ -1,13 +1,17 @@
 package com.example.carrito_compras;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -15,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.carrito_compras.Model.Producto;
+import com.google.android.material.animation.Positioning;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
@@ -49,11 +54,12 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private ListView listProduct, listCategory, listPrice;
-    private final ArrayList<String> product = new ArrayList<>();
+
+    private final ArrayList<?> product = new ArrayList<>();
     private final ArrayList<String> category = new ArrayList<>();
     private final ArrayList<String> price = new ArrayList<>();
 
-    private ArrayAdapter<String> productAdapter, categoryAdapter, priceAdapter;
+    private ArrayAdapter<?> productAdapter, categoryAdapter, priceAdapter;
 
     private PostService postService;
 
@@ -62,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        EdgeToEdge.enable(this);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -74,17 +80,13 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        productAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, product);
-        listProduct = findViewById(R.id.list);
-        listProduct.setAdapter(productAdapter);
+        //categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, category);
+        //listCategory = findViewById(R.id.listCategoria);
+        //listCategory.setAdapter(categoryAdapter);
 
-        categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, category);
-        listCategory = findViewById(R.id.listCategoria);
-        listCategory.setAdapter(categoryAdapter);
-
-        priceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, price);
-        listPrice = findViewById(R.id.listPrecio);
-        listPrice.setAdapter(priceAdapter);
+        //priceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, price);
+        //listPrice = findViewById(R.id.listPrecio);
+        //listPrice.setAdapter(priceAdapter);
 
         producto = findViewById(R.id.iptProducto);
         precio = findViewById(R.id.iptPrecio);
@@ -94,12 +96,29 @@ public class MainActivity extends AppCompatActivity {
         buscar = findViewById(R.id.search);
         actualizar = findViewById(R.id.update);
 
-        String txtProducto = producto.getText().toString();
-        String txtPrecio = precio.getText().toString();
-        String txtCategoria = categoria.getText().toString();
-
         initDataBase();
+        getData();
 
+        productAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, product);
+        listProduct.setAdapter(productAdapter);
+
+        /**listProduct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+                Producto selectedProduct;
+                selectedProduct = productAdapter.getItem(position);
+
+                Intent intent = new Intent(MainActivity.this, GetMain.class);
+
+                intent.putExtra("producto", selectedProduct.getProducto());
+                intent.putExtra("precio", selectedProduct.getPrecio());
+                intent.putExtra("categoria", selectedProduct.getCategoria());
+                intent.putExtra("descripcion", selectedProduct.getDescripcion());
+
+                startActivity(intent);
+            }
+        });**/
+        
         guardar.setOnClickListener(v ->{
 
             String product = producto.getText().toString();
@@ -162,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });**/
         });
-        obtenerDatos();
 
         actualizar.setOnClickListener(v ->{
             obtenerDatos();
@@ -228,15 +246,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getData(){
-        databaseReference.child("Productos").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Producto").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                listProduct.clearFocus();
+                listProduct = findViewById(R.id.list);
+                ArrayList<Producto> productList = new ArrayList<>();
+
                 for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
                     Producto p = objSnaptshot.getValue(Producto.class);
-                    listProduct.add(p);
+                    if (p != null){
+                        productList.add(p);
+                    }
                 }
-                productAdapter = new ArrayAdapter<Producto>(MainActivity.this, android.R.layout.simple_list_item_1, listProduct);
+                ArrayAdapter<Producto> productAdapter = new ArrayAdapter<> (MainActivity.this, android.R.layout.simple_list_item_1, productList);
                 listProduct.setAdapter(productAdapter);
             }
 
@@ -333,11 +355,10 @@ public class MainActivity extends AppCompatActivity {
                     category.clear();
                     price.clear();
                     for (Post post : response.body()) {
-                        product.add(post.getProducto());
+                        //product.add(post.getProducto());
                         category.add(post.getCategoria());
                         price.add(post.getPrecio());
                     }
-                    productAdapter.notifyDataSetChanged();
                     categoryAdapter.notifyDataSetChanged();
                     priceAdapter.notifyDataSetChanged();
                 } else {
