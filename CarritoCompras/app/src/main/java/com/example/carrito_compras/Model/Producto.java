@@ -1,7 +1,7 @@
 package com.example.carrito_compras.Model;
 
 public class Producto {
-    private String Uid, Producto, Precio, Categoria, Descripcion;
+    private String Uid, Producto, Precio, Categoria, Descripcion, ImagenUrl;
 
     public Producto(){
     }
@@ -41,8 +41,15 @@ public class Producto {
         Descripcion = descripcion;
     }
 
+    public String getImagenUrl() {
+        return ImagenUrl;
+    }
+    public void setImagenUrl(String imagenUrl) {
+        this.ImagenUrl = imagenUrl;
+    }
+
     @Override
     public String toString() {
-        return Producto+"\nCategoria: "+Categoria+"\nPrecio: "+Precio;//+" - Descripcion: "+Descripcion;
+        return Producto+"\nCategoria: "+Categoria+"\nPrecio: "+Precio+"\nDescripcion: "+Descripcion;
     }
 }

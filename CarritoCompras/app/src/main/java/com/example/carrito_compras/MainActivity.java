@@ -1,26 +1,27 @@
 package com.example.carrito_compras;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.carrito_compras.Model.Producto;
-import com.google.android.material.animation.Positioning;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
@@ -29,9 +30,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import retrofit2.Call;
@@ -46,14 +53,20 @@ import retrofit2.http.Path;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText producto, precio, categoria;
+    EditText producto, precio, categoria, descripcion;
 
     ImageButton guardar, buscar, actualizar, eliminar, menunav;
+
+    ImageView imagen;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    private static final int IMAGE_REQUEST_CODE = 100;
+    private Uri imageUri;
+    private String downloadUrl;
 
     private ListView listProduct, listCategory, listPrice;
 
@@ -90,9 +103,12 @@ public class MainActivity extends AppCompatActivity {
         //listPrice = findViewById(R.id.listPrecio);
         //listPrice.setAdapter(priceAdapter);
 
+        imagen = findViewById(R.id.image);
+
         producto = findViewById(R.id.iptProducto);
         precio = findViewById(R.id.iptPrecio);
         categoria = findViewById(R.id.iptCategoria);
+        descripcion = findViewById(R.id.iptDescripcion);
 
         menunav = findViewById(R.id.menu);
         guardar = findViewById(R.id.save);
@@ -129,13 +145,20 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        imagen.setOnClickListener(v ->{
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, IMAGE_REQUEST_CODE);
+        });
+
         guardar.setOnClickListener(v ->{
 
             String product = producto.getText().toString();
             String price = precio.getText().toString();
             String category = categoria.getText().toString();
+            String description = descripcion.getText().toString();
 
-            if(product.isEmpty()||price.isEmpty()||category.isEmpty()){
+            if(product.isEmpty() || price.isEmpty() ||  category.isEmpty()){
                 validation();
             }else {
                 Producto p = new Producto();
@@ -143,53 +166,14 @@ public class MainActivity extends AppCompatActivity {
                 p.setProducto(product);
                 p.setPrecio("S/. "+price);
                 p.setCategoria(category);
-                p.setDescripcion("Ingresar en la Web");
-                databaseReference.child("Producto").child(p.getUid()).setValue(p);
-                Toast.makeText(this, "Agregado", Toast.LENGTH_SHORT).show();
-                limpiarCampos();
+                p.setDescripcion(description);
+
+                if (imageUri != null) {
+                    imgToFireBase(imageUri, p.getUid());
+                } else{
+                    saveProduct(p);
+                }
             }
-            /*Post nuevoPost = new Post();
-            nuevoPost.setProducto(txtProducto);
-            nuevoPost.setPrecio(txtPrecio);
-            nuevoPost.setCategoria(txtCategoria);
-            nuevoPost.setDescripcion("Ingresar desde Web");
-
-            postService = retrofit.create(PostService.class);
-            Call<Post> call = postService.insertPost(nuevoPost);
-
-            call.enqueue(new Callback<Post>() {
-                @Override
-                public void onResponse(Call<Post> call, Response<Post> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        Log.d("DEBUG", "Datos recibidos: " + response.body());
-
-                        product.add(nuevoPost.getProducto());
-                        category.add(nuevoPost.getCategoria());
-                        price.add("S/ "+nuevoPost.getPrecio());
-
-                        arrayAdapter.notifyDataSetChanged();
-                        categoryAdapter.notifyDataSetChanged();
-                        priceAdapter.notifyDataSetChanged();
-
-                        limpiarCampos();
-
-                        Toast.makeText(MainActivity.this, "Producto guardado con éxito", Toast.LENGTH_SHORT).show();
-                    } else if (response.code() == 400) {
-                        Toast.makeText(MainActivity.this, "Error en la validación: " + response.message(), Toast.LENGTH_SHORT).show();
-                    } else {
-                        try {
-                            Log.e("API_ERROR", response.errorBody().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Post> call, Throwable t) {
-                    Toast.makeText(MainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });**/
         });
 
         eliminar.setOnClickListener(v ->{
@@ -227,7 +211,52 @@ public class MainActivity extends AppCompatActivity {
         });
 
         actualizar.setOnClickListener(v ->{
-            obtenerDatos();
+            String product = producto.getText().toString();
+            String act_price = precio.getText().toString();
+            String act_category = categoria.getText().toString();
+            String act_description = descripcion.getText().toString();
+
+            if(product.isEmpty()){
+                Toast.makeText(this, "El nombre del producto es obligatorio", Toast.LENGTH_SHORT).show();
+                producto.setError("Required");
+            } else {
+                Query query = databaseReference.child("Producto").orderByChild("producto").equalTo(product);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot productoSnapshot : dataSnapshot.getChildren()) {
+                                Map<String, Object> updates = new HashMap<>();
+
+                                if (!act_price.isEmpty()) {
+                                    updates.put("precio", "S/. " + act_price);
+                                }
+                                if (!act_category.isEmpty()) {
+                                    updates.put("categoria", act_category);
+                                }
+                                if (!act_description.isEmpty()) {
+                                    updates.put("descripcion", act_description);
+                                }
+                                if (!updates.isEmpty()) {
+                                    productoSnapshot.getRef().updateChildren(updates);
+                                    Toast.makeText(MainActivity.this, "Producto actualizado", Toast.LENGTH_SHORT).show();
+                                    limpiarCampos();
+                                } else {
+                                    Toast.makeText(MainActivity.this, "No hay campos nuevos para actualizar", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } else {
+                            Toast.makeText(MainActivity.this, "Producto no encontrado", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(MainActivity.this, "Error en la consulta", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         });
 
         buscar.setOnClickListener(v ->{
@@ -259,16 +288,59 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void imgToFireBase(Uri imageUri, String productId) {
+        if (imageUri != null) {
+            String fileName = UUID.randomUUID().toString();
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference("images/" + fileName);
+
+            storageReference.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                            downloadUrl = uri.toString();
+                        });
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+                    });
+        }
+    }
+
+    private void saveProduct(Producto p) {
+        databaseReference.child("Producto").child(p.getUid()).setValue(p)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, "Agregado", Toast.LENGTH_SHORT).show();
+                        limpiarCampos();
+                    } else {
+                        Toast.makeText(this, "Error al agregar", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            imagen.setImageURI(imageUri);
+            String productId = UUID.randomUUID().toString();
+            imgToFireBase(imageUri, productId);
+        }
+    }
+
     private void validation(){
-        EditText producto, precio, categoria;
+        EditText producto, precio, categoria, descripcion;
         producto = findViewById(R.id.iptProducto);
         precio = findViewById(R.id.iptPrecio);
         categoria = findViewById(R.id.iptCategoria);
+        descripcion = findViewById(R.id.iptDescripcion);
 
-        String txtProducto, txtPrecio, txtCategoria;
+        String txtProducto, txtPrecio, txtCategoria, txtDescripcion;
         txtProducto = producto.getText().toString();
         txtPrecio = precio.getText().toString();
         txtCategoria = categoria.getText().toString();
+        txtDescripcion = descripcion.getText().toString();
 
         if(txtProducto.isEmpty()){
             producto.setError("Required");
@@ -276,6 +348,14 @@ public class MainActivity extends AppCompatActivity {
             precio.setError("Required");
         }else if(txtCategoria.isEmpty()){
             categoria.setError("Required");
+        }else if(txtDescripcion.isEmpty()){
+            descripcion.setError("Required");
+        }else {
+            try {
+                double precioDouble = Double.parseDouble(txtPrecio);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Por favor, ingresa un número válido en el campo de precio", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -283,10 +363,14 @@ public class MainActivity extends AppCompatActivity {
         EditText producto = findViewById(R.id.iptProducto);
         EditText precio = findViewById(R.id.iptPrecio);
         EditText categoria = findViewById(R.id.iptCategoria);
+        EditText descripcion= findViewById(R.id.iptDescripcion);
+        ImageView imagen = findViewById(R.id.image);
 
         producto.setText("");
         precio.setText("");
         categoria.setText("");
+        descripcion.setText("");
+        //imagen.clear();
     }
 
     private void getData(){
