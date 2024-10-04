@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText producto, precio, categoria;
 
-    ImageButton guardar, buscar, actualizar, menunav;
+    ImageButton guardar, buscar, actualizar, eliminar, menunav;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 Producto p = new Producto();
                 p.setUid(UUID.randomUUID().toString());
                 p.setProducto(product);
-                p.setPrecio("S/ "+price);
+                p.setPrecio("S/. "+price);
                 p.setCategoria(category);
                 p.setDescripcion("Ingresar en la Web");
                 databaseReference.child("Producto").child(p.getUid()).setValue(p);

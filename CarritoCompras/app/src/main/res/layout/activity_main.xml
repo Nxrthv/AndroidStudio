@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:theme="@style/ThemeOverlay.AppCompat"
     android:gravity="end"
     android:orientation="vertical"
     tools:context=".MainActivity">
@@ -15,6 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:background="#8BBDA7">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/logo_removebg_preview"
+            android:layout_gravity="start"/>
 
         <ImageButton
             android:id="@+id/menu"
@@ -111,7 +118,6 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/black"
             android:paddingStart="15dp"
             android:text="Producto"
             android:textSize="18dp" />
@@ -142,12 +148,10 @@
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:padding="15dp"
+            android:padding="5dp"
             android:scrollbars="vertical"
-            android:clipToPadding="false"
             android:scrollbarStyle="outsideOverlay"
-            android:overScrollMode="ifContentScrolls"/>
+            android:overScrollMode="ifContentScrolls" />
 
         <!--<ListView
             android:id="@+id/listCategoria"
