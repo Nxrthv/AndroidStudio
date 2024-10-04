@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText producto, precio, categoria;
 
-    Button guardar, buscar, actualizar;
+    ImageButton guardar, buscar, actualizar, menunav;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         precio = findViewById(R.id.iptPrecio);
         categoria = findViewById(R.id.iptCategoria);
 
+        menunav = findViewById(R.id.menu);
         guardar = findViewById(R.id.save);
         buscar = findViewById(R.id.search);
         actualizar = findViewById(R.id.update);
@@ -119,6 +121,11 @@ public class MainActivity extends AppCompatActivity {
 
         initDataBase();
         getData();
+
+        menunav.setOnClickListener(v ->{
+            Intent intent = new Intent(MainActivity.this, ActivityMenu.class);
+            startActivity(intent);
+        });
 
         guardar.setOnClickListener(v ->{
 
