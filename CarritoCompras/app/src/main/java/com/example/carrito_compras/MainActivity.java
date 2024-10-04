@@ -27,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         guardar = findViewById(R.id.save);
         buscar = findViewById(R.id.search);
         actualizar = findViewById(R.id.update);
+        eliminar = findViewById(R.id.delete);
 
         listProduct = findViewById(R.id.list);
         productAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, product);
@@ -190,11 +192,45 @@ public class MainActivity extends AppCompatActivity {
             });**/
         });
 
+        eliminar.setOnClickListener(v ->{
+            String product = producto.getText().toString();
+
+            if(product.isEmpty()){
+                Toast.makeText(this, "Es necesario el Nombre del Producto", Toast.LENGTH_SHORT).show();
+            } else {
+                Query query = databaseReference.child("Producto").orderByChild("producto").equalTo(product);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot productoSnapshot : dataSnapshot.getChildren()) {
+                                productoSnapshot.getRef().removeValue()
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(MainActivity.this, "Producto eliminado", Toast.LENGTH_SHORT).show();
+                                            limpiarCampos();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(MainActivity.this, "Error al eliminar el producto", Toast.LENGTH_SHORT).show();
+                                        });
+                            }
+                        } else {
+                            Toast.makeText(MainActivity.this, "Producto no encontrado", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(MainActivity.this, "Error en la consulta", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
         actualizar.setOnClickListener(v ->{
             obtenerDatos();
         });
 
-        buscar.setOnClickListener(v -> {
+        buscar.setOnClickListener(v ->{
             PostService postService = retrofit.create(PostService.class);
             Call<ApiResponse> call = postService.getProduct(producto.getText().toString());
 
