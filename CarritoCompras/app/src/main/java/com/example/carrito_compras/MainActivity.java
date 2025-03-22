@@ -20,8 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.carrito_compras.Model.Producto;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DataSnapshot;
@@ -32,9 +31,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
     EditText producto, precio, categoria, descripcion;
 
-    ImageButton guardar, buscar, actualizar, eliminar, menunav;
+    ImageButton menunav;
+
+    MaterialButton guardar, buscar, actualizar, eliminar;
 
     ImageView imagen;
 
@@ -95,14 +94,6 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        //categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, category);
-        //listCategory = findViewById(R.id.listCategoria);
-        //listCategory.setAdapter(categoryAdapter);
-
-        //priceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, price);
-        //listPrice = findViewById(R.id.listPrecio);
-        //listPrice.setAdapter(priceAdapter);
-
         imagen = findViewById(R.id.image);
 
         producto = findViewById(R.id.iptProducto);
@@ -110,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         categoria = findViewById(R.id.iptCategoria);
         descripcion = findViewById(R.id.iptDescripcion);
 
-        menunav = findViewById(R.id.menu);
+        menunav = findViewById(R.id.menunav);
         guardar = findViewById(R.id.save);
         buscar = findViewById(R.id.search);
         actualizar = findViewById(R.id.update);
@@ -119,23 +110,6 @@ public class MainActivity extends AppCompatActivity {
         listProduct = findViewById(R.id.list);
         productAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, product);
         listProduct.setAdapter(productAdapter);
-
-        /**listProduct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-                Producto selectedProduct;
-                selectedProduct = productAdapter.getItem(position);
-
-                Intent intent = new Intent(MainActivity.this, GetMain.class);
-
-                intent.putExtra("producto", selectedProduct.getProducto());
-                intent.putExtra("precio", selectedProduct.getPrecio());
-                intent.putExtra("categoria", selectedProduct.getCategoria());
-                intent.putExtra("descripcion", selectedProduct.getDescripcion());
-
-                startActivity(intent);
-            }
-        });**/
 
         initDataBase();
         getData();
